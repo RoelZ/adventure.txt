@@ -1,2 +1,2 @@
 # txt
-First Text Adventure by Ricardo, Jerome and Roel
+First Adventure Game by Ricardo, Jerome and Roel
