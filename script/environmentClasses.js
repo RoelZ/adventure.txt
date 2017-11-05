@@ -36,19 +36,19 @@
 
 	function Door(name, description, doorKeyID){
 		//public attributes
-		//if Door object doesn't have doorKeyID it can't be locked
+		//get the vars that are setup in the parent class
+		StaticItem.call(this, name, description);
+		
+		
+		this.doorKeyID = doorKeyID;
+		//if Door object doesn't have doorKeyID it can't be locked and is open
 		if(doorKeyID === undefined){
 			this.locked = false;
 		}else{
 			this.locked = true;
 		}
-
-		this.name = name;
-		this.description = description;
-		this.id = GiveUniqueID();
-		this.doorKeyID = doorKeyID;
 		
-		//
+		//private attributes
 		var itemKeyID = '';
 		
 		//operations
@@ -69,7 +69,7 @@
 		};
 
 		this.setItemKeyID = function(numberID){
-			itemKeyID = numberID || ""; 
+			itemKeyID = numberID || ''; 
 		};
 		
 	}
@@ -104,7 +104,6 @@
 	 doorLivingroomToKitchen.openDoor();
 	 
 	 doorLivingroomToHallway.openDoor();
-	 doorLivingroomToHallway.setItemKeyID(143);
 	 
  });
 
