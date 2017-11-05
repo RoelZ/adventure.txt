@@ -13,7 +13,7 @@
 		return globalID;
 	}
 	
-
+	//parent class voor all objects that are static
 	function StaticItem(name, description){
 		//public attributes
 		this.name = name;
@@ -33,7 +33,27 @@
 			return this.id;
 		};
 	}
-
+	 
+	function PortableItem(name, description){
+		//public attributes
+		//get the vars that are setup in the parent class
+		StaticItem.call(this, name, description);
+		this.pickedUp = false;
+		
+		this.setPickedUp = function(){
+			if(!this.pickedUp){
+				this.pickedUp = true;
+			}else{
+				this.pickedUp = false;
+			}
+		};
+		
+	}
+	//PortableItem is child of StaticItem
+	PortableItem.prototype = new StaticItem();
+	PortableItem.prototype.constructor = PortableItem;
+	 
+	
 	function Door(name, description, doorKeyID){
 		//public attributes
 		//get the vars that are setup in the parent class
@@ -77,6 +97,28 @@
 	//Door is child of StaticItem
 	Door.prototype = new StaticItem();
 	Door.prototype.constructor = Door;
+	 
+	
+	function Key(name, description, itemKeyID){
+		PortableItem.call(this, name, description);
+		this.itemKeyID = itemKeyID;
+		
+		this.unLock = function(){
+			return this.itemKeyID;
+		};
+		
+		
+	}
+	//Key is child of StaticItem
+	Key.prototype = new PortableItem();
+	Key.prototype.constructor = Key; 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	//test classes with making objects
