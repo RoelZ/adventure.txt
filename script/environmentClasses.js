@@ -2,7 +2,7 @@
  $(document).ready(function(){
 	 //set globalID
 	 "use strict";
-	 var globalID = null;
+	 let globalID = null;
 	 
 	function GiveUniqueID(){
 		if(globalID === null){
