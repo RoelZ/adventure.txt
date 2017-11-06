@@ -122,26 +122,28 @@
 	 
 	 
 	//test classes with making objects
-	var room = new StaticItem("living room", 
+	let room = new StaticItem("living room", 
 							  "It's a well lite room and there are two doors.");
-	var outside = new StaticItem("outside", 
+	let outside = new StaticItem("outside", 
 								 "It's a forrest and it's raining");
-	var doorLivingroomToKitchen = new Door("door from livingroom to kitchen", 
+	let doorLivingroomToKitchen = new Door("door from livingroom to kitchen", 
 										   "You can go from the livinging room to the kitchen and back", 
 										   123);
-	var doorLivingroomToHallway = new Door("door from livingroom to hallway", 
+	let doorLivingroomToHallway = new Door("door from livingroom to hallway", 
 										   "You can go from the livinging room to the hallway and back");
-		 
+	
+	let keyLivingroomToKitchen = new Key("rusty key", "This is the key that opens the door to the kitchen", 123);  
 	//console.log("description of "+ room.getName() +": \n" + room.getDescription() + "\n Unique ID: " + room.getID());
 	//console.log("description of "+ outside.getName() +": \n" + outside.getDescription() + "\n Unique ID: " + outside.getID());
 	
 	//console.log("description of "+ doorLivingroomToKitchen.getName() +": \n" + doorLivingroomToKitchen.getDescription() + "\n Unique ID: " + doorLivingroomToKitchen.getID());
-	// console.log("description of "+ doorLivingroomToHallway.getName() +": \n" + doorLivingroomToHallway.getDescription() + "\n Unique ID: " + doorLivingroomToHallway.getID());
+	 console.log("description of "+ doorLivingroomToHallway.getName() +": \n" + doorLivingroomToHallway.getDescription() + "\n Unique ID: " + doorLivingroomToHallway.getID());
+	 console.log("description of "+ keyLivingroomToKitchen.getName() +": \n" + keyLivingroomToKitchen.getDescription() + "\n Unique ID: " + keyLivingroomToKitchen.getID());
  	
 	 //door is set to locked in the creation of the object
 	 doorLivingroomToKitchen.openDoor();
 	 
-	 doorLivingroomToKitchen.setItemKeyID(123);
+	 doorLivingroomToKitchen.setItemKeyID(keyLivingroomToKitchen.unLock());
 	 doorLivingroomToKitchen.toggleLock();
 	 doorLivingroomToKitchen.openDoor();
 	 
