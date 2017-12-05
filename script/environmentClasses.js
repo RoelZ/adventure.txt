@@ -4,6 +4,9 @@
 	 "use strict";
 	 let globalID = null;
 	 
+	 //set current space var
+	 let currentSpace;
+	 
 	function GiveUniqueID(){
 		if(globalID === null){
 			globalID = 0;
@@ -54,7 +57,7 @@
 	PortableItem.prototype.constructor = PortableItem;
 	 
 	
-	function Door(name, description, doorKeyID){
+	function Door(name, description, currentSpace, newSpace, doorKeyID){
 		//public attributes
 		//get the vars that are setup in the parent class
 		StaticItem.call(this, name, description);
@@ -92,6 +95,12 @@
 			itemKeyID = numberID || ''; 
 		};
 		
+		
+		
+		
+		/*here has to come handler to get to next room (see vars that are set in this constructor)*/
+		
+		
 	}
 	
 	//Door is child of StaticItem
@@ -124,7 +133,7 @@
 		this.objects = objects;
 		
 		this.getObjects = function(){
-			console.log("Objects in the room:")
+			console.log("Objects in the room:");
 			for(let i = 0; i<this.objects.length; i++){
 				console.log(i+". "+objects[i].getName());
 			}
@@ -137,45 +146,55 @@
 	Room.prototype.constructor = Room; 
 	 
 	 
+	//setup all the objects names
 	 
-	//test classes with making objects
-	let outside = new StaticItem("outside", 
+	 //doors
+	 let doorLivingroomToKitchen;
+	 let doorLivingroomToHallway;
+	 //keys
+	 let keyLivingroomToKitchen;
+	 //spaces
+	 let livingRoom;
+	 let kitchen;
+	 let hallway;
+	 let outside;
+	 
+		//test classes with making objects
+		outside = new StaticItem("outside", 
 								 "It's a forrest and it's raining");
-	let doorLivingroomToKitchen = new Door("door from livingroom to kitchen", 
-										   "You can go from the livinging room to the kitchen and back", 
+		doorLivingroomToKitchen = new Door("Wooden door", 
+										   "You can go from the livinging room to the kitchen and back",
+										   currentSpace,
+										   kitchen,
 										   123);
-	let doorLivingroomToHallway = new Door("door from livingroom to hallway", 
-										   "You can go from the livinging room to the hallway and back");
-	
-	let keyLivingroomToKitchen = new Key("rusty key", "This is the key that opens the door to the kitchen", 123);
-	
-	let room = new Room("living room", 
-						"It's a well lite room and there are two doors.",
-				   		[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToKitchen]);
+		doorLivingroomToHallway = new Door("Wooden door painted green", 
+										   "You can go from the livinging room to the hallway and back",
+										   currentSpace,
+										   hallway);
 
-	/*
-	Testing scripts
-	console.log("description of "+ room.getName() +": \n" + room.getDescription() + "\n Unique ID: " + room.getID());
-	console.log("description of "+ outside.getName() +": \n" + outside.getDescription() + "\n Unique ID: " + outside.getID());
+
+		keyLivingroomToKitchen = new Key("rusty key", "This is the key that opens the door to the kitchen", 123);
+
+		livingRoom = new Room("living room", 
+						"It's a well lite room and there are two doors.",
+						[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToKitchen]);
+		kitchen = new Room("kitchen", 
+						"The kitchen... Only one door.",
+						[doorLivingroomToKitchen]);
+		hallway = new Room("hallway", 
+						"This is the hallway. You see light comming in through the glass window next to the front door. And there is the door to the living room.",
+						[doorLivingroomToHallway]);
+
+	//set current space to room
+	 currentSpace = livingRoom;
+
 	
-	console.log("description of "+ doorLivingroomToKitchen.getName() +": \n" + doorLivingroomToKitchen.getDescription() + "\n Unique ID: " + doorLivingroomToKitchen.getID());
-	
-	 console.log("description of "+ doorLivingroomToHallway.getName() +": \n" + doorLivingroomToHallway.getDescription() + "\n Unique ID: " + doorLivingroomToHallway.getID());
 	 
-	 console.log("description of "+ keyLivingroomToKitchen.getName() +": \n" + keyLivingroomToKitchen.getDescription() + "\n Unique ID: " + keyLivingroomToKitchen.getID());
- 	*/
+	 console.log("description of first object in room: "+ currentSpace.objects[0].getName());
+	 currentSpace.getObjects();
 	 
-	 console.log("description of first object in room: "+ room.objects[0].getName());
-	 room.getObjects();
 	 
-	 //door is set to locked in the creation of the object
-	 doorLivingroomToKitchen.openDoor();
 	 
-	 doorLivingroomToKitchen.setItemKeyID(keyLivingroomToKitchen.unLock());
-	 doorLivingroomToKitchen.toggleLock();
-	 doorLivingroomToKitchen.openDoor();
-	 
-	 doorLivingroomToHallway.openDoor();
 	 
  });
 
