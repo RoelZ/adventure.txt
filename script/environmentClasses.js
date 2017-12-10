@@ -6,6 +6,10 @@ $(document).ready(function(){
 
 	//set current space var
 	let currentSpace;
+	
+	//current inventory
+	let currentInventory;
+	
 
 	function GiveUniqueID(){
 		if(globalID === null){
@@ -57,13 +61,17 @@ $(document).ready(function(){
 	PortableItem.prototype.constructor = PortableItem;
 
 
-	function Door(name, description, newSpace, doorKeyID){
+	function Door(name, description, doorKeyID){
 		//public attributes
 		//get the vars that are setup in the parent class
 		StaticItem.call(this, name, description);
-
-
+		
 		this.doorKeyID = doorKeyID;
+		
+		this.newSpace = undefined;
+		this.tempSpace = undefined;
+		
+		
 		//if Door object doesn't have doorKeyID it can't be locked and is open
 		if(doorKeyID === undefined){
 			this.locked = false;
@@ -77,7 +85,17 @@ $(document).ready(function(){
 		//operations
 		this.openDoor = function(){
 			if(!this.locked){
-				console.log("you enter another room/place");
+				
+				//set global current space to the new space (you enterd a new room);
+				currentSpace = this.newSpace;
+				console.log("---------------------------------");
+				console.log(currentSpace);
+				//set the door new space to old place where you come from
+				this.newSpace = this.tempSpace;
+				console.log(this.newSpace);
+				this.tempSpace = currentSpace;
+				console.log(this.tempSpace);
+				console.log("---------------------------------");
 			}else{
 				console.log("This door is locked. You need to find a key.");
 			}
@@ -94,12 +112,13 @@ $(document).ready(function(){
 		this.setItemKeyID = function(numberID){
 			itemKeyID = numberID || ''; 
 		};
-
-
-
-
-		/*here has to come handler to get to next room (see vars that are set in this constructor)*/
-
+		
+		
+		//set the two spaces where the door is the gateway to/from
+		this.setSpaces = function(currentSpace, goToSpace){
+			this.newSpace = goToSpace ;
+			this.tempSpace = currentSpace;
+		};
 
 	}
 
@@ -146,10 +165,13 @@ $(document).ready(function(){
 	//setup all the objects names
 
 	//doors
-	let doorLivingroomToKitchen;
-	let doorLivingroomToHallway;
+	var doorLivingroomToKitchen;
+	var doorLivingroomToHallway;
+	var doorHallwayToOutside;
+	
 	//keys
-	let keyLivingroomToKitchen;
+	let keyLivingroomToHallway;
+	let keyHallwaytoOutside;
 	//spaces
 	let livingRoom;
 	let kitchen;
@@ -159,41 +181,56 @@ $(document).ready(function(){
 	//test classes with making objects
 	
 	doorLivingroomToKitchen = new Door("Wooden door", 
-	"You can go from the livinging room to the kitchen and back",
-	kitchen);
+										"You can go from the livinging room to the kitchen and back");
 	
 	doorLivingroomToHallway = new Door("Wooden door painted green", 
-	"You can go from the livinging room to the hallway and back",
-	hallway,
-	123);
+										"You can go from the livinging room to the hallway and back",
+										123);
+	doorHallwayToOutside = new Door("Front door",
+								   "You can go outside the house and back",
+								   213);
 
 
-	keyLivingroomToKitchen = new Key("rusty key", "This is the key that opens the door to the kitchen", 123);
+	keyLivingroomToHallway = new Key("rusty key",
+									 "This is the key that opens the door to the kitchen", 
+									 123);
+	keyHallwaytoOutside = new Key("blue key",
+								 "This is the key that opens the front door",
+								 213);
 
 	livingRoom = new Room("living room", 
-	"It's a well lite room and there are two doors.",
-	[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToKitchen]);
+							"It's a well lite room and there are two doors.",
+							[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToHallway]);
 	
 	kitchen = new Room("kitchen", 
-	"The kitchen... Only one door.",
-	[doorLivingroomToKitchen]);
+						"The kitchen... Only one door.",
+						[doorLivingroomToKitchen]);
 	
 	hallway = new Room("hallway", 
-	"This is the hallway. You see light comming in through the glass window next to the front door. And there is the door to the living room.",
-	[doorLivingroomToHallway]);
+						"This is the hallway. You see light comming in through the glass window next to the front door. And there is the door to the living room.",
+						[doorLivingroomToHallway, doorHallwayToOutside, keyHallwaytoOutside]);
 	
 	outside = new StaticItem("outside", 
-	"It's a forrest and it's a sunny day");
+							"It's a forrest and it's a sunny day",
+							[doorHallwayToOutside]);
+	
+	//set the rooms that are connected to this door. First door where you in then the door that goes to.
+	doorLivingroomToKitchen.setSpaces(livingRoom, kitchen);
+	doorLivingroomToHallway.setSpaces(livingRoom, hallway);
+	doorHallwayToOutside.setSpaces(hallway, outside);
 
 	//set current space to room
 	currentSpace = livingRoom;
 
 
-
-	console.log("description of first object in room: "+ currentSpace.objects[0].getName());
-	currentSpace.getObjects();
-
-
+	console.log(currentSpace.getName());
+	currentSpace.objects[1].openDoor();
+	currentSpace.objects[1].setItemKeyID(keyLivingroomToHallway.unLock());
+	currentSpace.objects[1].toggleLock();
+	currentSpace.objects[1].openDoor();
+	console.log("You entered: " + currentSpace.getName());
+	currentSpace.objects[0].openDoor();
+	console.log("You entered: " + currentSpace.getName());
 
 
 });
