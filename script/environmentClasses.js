@@ -72,7 +72,7 @@ $(document).ready(function(){
 		this.tempSpace = undefined;
 		
 		
-		//if Door object doesn't have doorKeyID it can't be locked and is open
+		//if Door object doesn"t have doorKeyID it can"t be locked and is open
 		if(doorKeyID === undefined){
 			this.locked = false;
 		}else{
@@ -80,7 +80,7 @@ $(document).ready(function(){
 		}
 
 		//private attributes
-		var itemKeyID = '';
+		var itemKeyID = "";
 
 		//operations
 		this.openDoor = function(){
@@ -110,7 +110,7 @@ $(document).ready(function(){
 		};
 
 		this.setItemKeyID = function(numberID){
-			itemKeyID = numberID || ''; 
+			itemKeyID = numberID || ""; 
 		};
 		
 		
@@ -199,7 +199,7 @@ $(document).ready(function(){
 								 213);
 
 	livingRoom = new Room("living room", 
-							"It's a well lite room and there are two doors.",
+							"It"s a well lite room and there are two doors.",
 							[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToHallway]);
 	
 	kitchen = new Room("kitchen", 
@@ -211,7 +211,7 @@ $(document).ready(function(){
 						[doorLivingroomToHallway, doorHallwayToOutside, keyHallwaytoOutside]);
 	
 	outside = new StaticItem("outside", 
-							"It's a forrest and it's a sunny day",
+							"It"s a forrest and it"s a sunny day",
 							[doorHallwayToOutside]);
 	
 	//set the rooms that are connected to this door. First door where you in then the door that goes to.
