@@ -221,19 +221,19 @@ $(document).ready(function(){
 	//set current space to room
 	currentSpace = livingRoom;
 
-
+	
+	//pick up the key and store it in your inventory
+	keyLivingroomToHallway.pickUp();
+	//get name current space
 	console.log(currentSpace.getName());
 	currentSpace.objects[1].openDoor();
-	currentSpace.objects[1].setItemKeyID(keyLivingroomToHallway.unLock());
+	currentSpace.objects[1].setItemKeyID(currentInventory[0].unLock());
 	currentSpace.objects[1].toggleLock();
 	currentSpace.objects[1].openDoor();
 	console.log("You entered: " + currentSpace.getName());
 	currentSpace.objects[0].openDoor();
 	console.log("You entered: " + currentSpace.getName());
-	keyLivingroomToHallway.pickUp();
-	console.log(currentInventory);
-	keyLivingroomToHallway.pickUp();
-	console.log(currentInventory);
+	
 
 });
 
