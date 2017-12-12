@@ -8,7 +8,7 @@ $(document).ready(function(){
 	let currentSpace;
 	
 	//current inventory
-	let currentInventory;
+	let currentInventory = [];
 	
 
 	function GiveUniqueID(){
@@ -47,12 +47,16 @@ $(document).ready(function(){
 		StaticItem.call(this, name, description);
 		this.pickedUp = false;
 
-		this.setPickedUp = function(){
+		this.pickUp = function(){
 			if(!this.pickedUp){
 				this.pickedUp = true;
+				currentInventory.push(this);
 			}else{
 				this.pickedUp = false;
+				
+				currentInventory.splice(currentInventory.indexOf(this),1);
 			}
+			
 		};
 
 	}
@@ -88,14 +92,9 @@ $(document).ready(function(){
 				
 				//set global current space to the new space (you enterd a new room);
 				currentSpace = this.newSpace;
-				console.log("---------------------------------");
-				console.log(currentSpace);
 				//set the door new space to old place where you come from
 				this.newSpace = this.tempSpace;
-				console.log(this.newSpace);
 				this.tempSpace = currentSpace;
-				console.log(this.tempSpace);
-				console.log("---------------------------------");
 			}else{
 				console.log("This door is locked. You need to find a key.");
 			}
@@ -199,7 +198,7 @@ $(document).ready(function(){
 								 213);
 
 	livingRoom = new Room("living room", 
-							"It"s a well lite room and there are two doors.",
+							"It's a well lite room and there are two doors.",
 							[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToHallway]);
 	
 	kitchen = new Room("kitchen", 
@@ -211,10 +210,10 @@ $(document).ready(function(){
 						[doorLivingroomToHallway, doorHallwayToOutside, keyHallwaytoOutside]);
 	
 	outside = new StaticItem("outside", 
-							"It"s a forrest and it"s a sunny day",
+							"It's a forrest and it's a sunny day",
 							[doorHallwayToOutside]);
 	
-	//set the rooms that are connected to this door. First door where you in then the door that goes to.
+	//set the rooms that are connected to this door. First room where you in then the room that goes to.
 	doorLivingroomToKitchen.setSpaces(livingRoom, kitchen);
 	doorLivingroomToHallway.setSpaces(livingRoom, hallway);
 	doorHallwayToOutside.setSpaces(hallway, outside);
@@ -231,7 +230,10 @@ $(document).ready(function(){
 	console.log("You entered: " + currentSpace.getName());
 	currentSpace.objects[0].openDoor();
 	console.log("You entered: " + currentSpace.getName());
-
+	keyLivingroomToHallway.pickUp();
+	console.log(currentInventory);
+	keyLivingroomToHallway.pickUp();
+	console.log(currentInventory);
 
 });
 
