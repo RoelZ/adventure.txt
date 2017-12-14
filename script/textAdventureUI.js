@@ -15,25 +15,25 @@
 	$("#mainStory").html(mainStory1_01);
 	
 	//Checks on keydown if "enter" is pressed 
-	$( "#typeHere" ).on( "keydown", function( event ) {
-		if(event.which === 13){
+	$( "#typeHere" ).on( "keydown", function( keyPressed ) {
+		if(keyPressed.which === 13){
 			//set variable with the value of the input field
 			whatIsTyped = $("#typeHere").val();
 			//check the switch function is there is something that is typed right
 			checkWhatIsTyped(whatIsTyped);
 		}
 	});
-	 
-	 function setAnswer(placeholder,answer, cursor){
+	
+	function setAnswer(placeholder,answer, cursor){
 		//make the input field empty
 		$( "#typeHere" ).val("");
-		 
+
 		//make the response div empty 
 		$(placeholder).empty();
-		
+
 		//remove all .typed-cursor that is set bij the Typed script 
 		$( ".typed-cursor" ).remove();
-		
+
 		//execute Typed function in the #response div with the $answer
 		let typed = new Typed(placeholder, {
 			strings: [answer],
@@ -41,7 +41,85 @@
 			backSpeed: 0,
 			showCursor:cursor
 		});
+	}
+
+	//setup all the objects names
+
+	//doors
+	var doorLivingroomToKitchen;
+	var doorLivingroomToHallway;
+	var doorHallwayToOutside;
+	
+	//other Items
+	var coffeeTable;
+	 
+	//keys
+	let keyLivingroomToHallway;
+	let keyHallwaytoOutside;
+	//spaces
+	let livingRoom;
+	let kitchen;
+	let hallway;
+	let outside;
+
+	//test classes with making objects
+	
+	doorLivingroomToKitchen = new Door("Wooden door", 
+										"You can go from the livinging room to the kitchen and back");
+	
+	doorLivingroomToHallway = new Door("Wooden door painted green", 
+										"You can go from the livinging room to the hallway and back",
+										123);
+	doorHallwayToOutside = new Door("Front door",
+								   "You can go outside the house and back",
+								   213);
+	
+	keyLivingroomToHallway = new Key("rusty key",
+									 "This is the key that opens the door to the kitchen", 
+									 123);
+	keyHallwaytoOutside = new Key("blue key",
+								 "This is the key that opens the front door",
+								 213);
+	coffeeTable = new StaticItem("Coffee table",
+						  "A small coffee table",
+						  [keyLivingroomToHallway,keyHallwaytoOutside]);
+
+	livingRoom = new Room("living room", 
+							"It's a well lite room and there are two doors and a coffee table.",
+							[doorLivingroomToKitchen, doorLivingroomToHallway, coffeeTable]);
+	
+	kitchen = new Room("kitchen", 
+						"The kitchen... Only one door.",
+						[doorLivingroomToKitchen]);
+	
+	hallway = new Room("hallway", 
+						"This is the hallway. You see light comming in through the glass window next to the front door. And there is the door to the living room.",
+						[doorLivingroomToHallway, doorHallwayToOutside]);
+	
+	outside = new StaticItem("outside", 
+							"It's a forrest and it's a sunny day",
+							[doorHallwayToOutside]);
+	
+	//set the rooms that are connected to this door. First room where you in then the room that goes to.
+	doorLivingroomToKitchen.setSpaces(livingRoom, kitchen);
+	doorLivingroomToHallway.setSpaces(livingRoom, hallway);
+	doorHallwayToOutside.setSpaces(hallway, outside);
+
+	//set current space to room
+	currentSpace = livingRoom;
+
+	
+/*
+//	//Functions that are triggered by certain phrases
+//
+*/
+	 function lookAround(){
+		 let answer;
+		 answer = currentSpace.getDescription();
+		 return answer; 
 	 }
+	 
+	 	 
 	 
 	 function checkWhatIsTyped(typed){
 		 
@@ -51,7 +129,7 @@
 			case "look around":
 			case "look space":
 				//give description of the space.
-				setAnswer("#response","You see a room with two doors.\nOne door at the left and one at the right.\nAnd there is a table in the room.", true);
+				setAnswer("#response",lookAround(), true);
 				break;
 			case "open door":
 				setAnswer("#response","Which door? ", true);
@@ -89,81 +167,6 @@
 			default:
 				setAnswer("#response","be more specific. Don't understand: "+ convertType, true);
 		 }
-	 }
-
-	//setup all the objects names
-
-	//doors
-	var doorLivingroomToKitchen;
-	var doorLivingroomToHallway;
-	var doorHallwayToOutside;
-	
-	//keys
-	let keyLivingroomToHallway;
-	let keyHallwaytoOutside;
-	//spaces
-	let livingRoom;
-	let kitchen;
-	let hallway;
-	let outside;
-
-	//test classes with making objects
-	
-	doorLivingroomToKitchen = new Door("Wooden door", 
-										"You can go from the livinging room to the kitchen and back");
-	
-	doorLivingroomToHallway = new Door("Wooden door painted green", 
-										"You can go from the livinging room to the hallway and back",
-										123);
-	doorHallwayToOutside = new Door("Front door",
-								   "You can go outside the house and back",
-								   213);
-
-
-	keyLivingroomToHallway = new Key("rusty key",
-									 "This is the key that opens the door to the kitchen", 
-									 123);
-	keyHallwaytoOutside = new Key("blue key",
-								 "This is the key that opens the front door",
-								 213);
-
-	livingRoom = new Room("living room", 
-							"It's a well lite room and there are two doors.",
-							[doorLivingroomToKitchen, doorLivingroomToHallway, keyLivingroomToHallway]);
-	
-	kitchen = new Room("kitchen", 
-						"The kitchen... Only one door.",
-						[doorLivingroomToKitchen]);
-	
-	hallway = new Room("hallway", 
-						"This is the hallway. You see light comming in through the glass window next to the front door. And there is the door to the living room.",
-						[doorLivingroomToHallway, doorHallwayToOutside, keyHallwaytoOutside]);
-	
-	outside = new StaticItem("outside", 
-							"It's a forrest and it's a sunny day",
-							[doorHallwayToOutside]);
-	
-	//set the rooms that are connected to this door. First room where you in then the room that goes to.
-	doorLivingroomToKitchen.setSpaces(livingRoom, kitchen);
-	doorLivingroomToHallway.setSpaces(livingRoom, hallway);
-	doorHallwayToOutside.setSpaces(hallway, outside);
-
-	//set current space to room
-	currentSpace = livingRoom;
-
-	
-	//pick up the key and store it in your inventory
-	keyLivingroomToHallway.pickUp();
-	//get name current space
-	console.log(currentSpace.getName());
-	currentSpace.objects[1].openDoor();
-	currentSpace.objects[1].setItemKeyID(currentInventory[0].unLock());
-	currentSpace.objects[1].toggleLock();
-	currentSpace.objects[1].openDoor();
-	console.log("You entered: " + currentSpace.getName());
-	currentSpace.objects[0].openDoor();
-	console.log("You entered: " + currentSpace.getName());
-
-	 
+	 } 
 	 
  });
