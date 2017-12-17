@@ -162,7 +162,7 @@
 			 if(container.objects[i].getName() === nameItem){
 				 container.objects[i].pickUp();
 				 container.objects.splice(container.objects.indexOf(container.objects[i]),1);
-				 answer = "You pick up the " + container.objects[i].getName() + " from the " + container.getName();
+				 answer = "You pick up the " + nameItem + " from the " + container.getName();
 				 return answer;
 			 }
 			 
