@@ -56,6 +56,9 @@
 	//keys
 	let keyLivingroomToHallway;
 	let keyHallwaytoOutside;
+	 
+	let ball;
+	let apple; 
 	//spaces
 	let livingRoom;
 	let kitchen;
@@ -80,9 +83,14 @@
 	keyHallwaytoOutside = new Key("blue key",
 								 "This is the key that opens the front door",
 								 213);
-	coffeeTable = new StaticItem("Coffee table",
+	ball = new PortableItem("ball",
+						    "A small rubber ball");
+	apple = new PortableItem("apple",
+						"A tasty red apple");
+	 
+	coffeeTable = new StaticItem("coffee table",
 						  "A small coffee table",
-						  [keyLivingroomToHallway,keyHallwaytoOutside]);
+						  [keyLivingroomToHallway,keyHallwaytoOutside, ball, apple]);
 
 	livingRoom = new Room("living room", 
 							"It's a well lite room and there are two doors and a coffee table.",
@@ -119,7 +127,48 @@
 		 return answer; 
 	 }
 	 
-	 	 
+	 function checkContainert(container){
+		 let answer;
+		 
+		 if(container.length <= 0 || container.length == undefined){
+			 answer = "You don't carry anything with you."
+		 }else{
+			answer = "You see: ";
+			for(let i= 0; i<container.length; i++){
+				if(i===0){
+					answer = answer+container[i].getName();
+				}else if(i<container.length-1){
+					answer = answer + ", " + container[i].getName();
+				}else{
+					let name = container[i].getName();
+					let firstLetter = name[0].toLowerCase();
+					if(firstLetter === "a" || firstLetter === "o" || firstLetter === "u" || firstLetter === "i" || firstLetter === "e"){
+						answer = answer + " and an " + name;
+					}else{
+						answer = answer + " and a " + name;
+					}
+				}
+				
+			} 
+		 }
+		 return answer;
+	 }
+	 
+	 
+	 function getItem(nameItem, container){
+		 let answer;
+		 for(let i=0; i < container.objects.length; i++){
+			
+			 if(container.objects[i].getName() === nameItem){
+				 container.objects[i].pickUp();
+				 container.objects.splice(container.objects.indexOf(container.objects[i]),1);
+				 answer = "You pick up the " + container.objects[i].getName() + " from the " + container.getName();
+				 return answer;
+			 }
+			 
+			 
+		 }
+	 }
 	 
 	 function checkWhatIsTyped(typed){
 		 
@@ -134,16 +183,36 @@
 			case "open door":
 				setAnswer("#response","Which door? ", true);
 				break;
-			case "look at table":
-			case "see table":
-			case "check table":
-				setAnswer("#response","You see a key at the table", true);
+			case "look at coffee table":
+			case "see coffee table":
+			case "check coffee table":
+				setAnswer("#response",checkContainert(coffeeTable.objects), true);
 				break;
-			case "take key":
-			case "get key":
-			case "grab key":
-			case "pick up key":
-				setAnswer("#response","You pick up the key from the table", true);
+			case "take rusty key":
+			case "get rusty key":
+			case "grab rusty key":
+			case "pick up rusty key":
+				
+				setAnswer("#response",getItem("rusty key", coffeeTable), true);
+				break;		
+			case "take blue key":
+			case "get blue key":
+			case "grab blue key":
+			case "pick up blue key":
+				
+				setAnswer("#response",getItem("blue key", coffeeTable), true);
+				break;		
+			case "take ball":
+			case "get ball":
+			case "grab ball":
+			case "pick up ball":
+				setAnswer("#response",getItem("ball", coffeeTable), true);
+				break;		
+			case "take apple":
+			case "get apple":
+			case "grab apple":
+			case "pick up appple":
+				setAnswer("#response",getItem("apple", coffeeTable), true);
 				break;		
 			case "open door with key": 
 			case "use key on door": 
@@ -163,6 +232,10 @@
 				break;
 			case "use key on right door": 
 				setAnswer("#response","Key doesn't fit in this door", true);
+				break;
+			case "check my inventory": 
+			case "check inventory": 
+				setAnswer("#response",checkContainert(currentInventory), true);
 				break;
 			default:
 				setAnswer("#response","be more specific. Don't understand: "+ convertType, true);
