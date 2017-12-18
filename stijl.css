@@ -3,7 +3,9 @@
 
 html,body{
 	height: 100%;
+	overflow: hidden;
 }
+
 
 p{
 	margin: 0px;
@@ -13,12 +15,12 @@ body{
 	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, "sans-serif";
 	font-size: 20px;
 	margin: 0;
+	color:#665743;
 }
 
 #container{
-	width: 90%;
 	height: 100%;
-	/*background-color:#F8F8F8;*/
+	background-color:#F6F7BE;
 	margin: 0 auto;
 	text-align: center;
 	position: relative;
@@ -26,33 +28,59 @@ body{
 }
 
 #mainStory{
-	height: 33%;
-	width: 90%;
+	height: 42%;
 	margin: 0 auto;
-	background-color: #FBFFBB;
+	background-color:#F6F7BE;
+	vertical-align: middle;
+}
+
+#mainstoryText{
+	padding: 50px 0 0 0;
 }
 
 #responseBlok{
 	color:#676767;
-	width: 90%;
-	height: 33%;
+	height: 42%;
 	margin: 0 auto;
-	background-color: #DFFFC7;
+	background-color:#E5AC27;
 }
 
 #response{
+	
+}
+
+#responsePadding{
+	padding: 50px 0 0 0;
+}
+
+#inputField{
+	 box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	width: 100%;
+	height: 16%;
+	background-color: #BF4E28;
+	border: 5px #665743 solid; 
+}
+
+#inputPadding{
+	padding: .5em 0 0 0;
+}
+
+input:focus{
+	 outline: none;
 }
 
 #typeHere{
-	width: 90%;
-	height: 33%;
-	margin: 0 auto;
-	background-color: #BAE1FF;
-}
-input {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
 	font-size: 20px;
-  }
-
+	border:none; 
+	text-align: center;
+	background: transparent;
+	color:#312A20;
+}
 
 
 .typed-cursor{

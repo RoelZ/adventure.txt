@@ -12,22 +12,21 @@
 	mainStory1_01 = "You wake up in a room on the floor.<br>And you don't know where you are...";
 	
 	
-	$("#mainStory").html(mainStory1_01);
+	$("#mainstoryText").html(mainStory1_01);
 	
 	//Checks on keydown if "enter" is pressed 
 	$( "#typeHere" ).on( "keydown", function( keyPressed ) {
 		if(keyPressed.which === 13){
 			//set variable with the value of the input field
 			whatIsTyped = $("#typeHere").val();
+			//make the input field empty
+			$( "#typeHere" ).val("");
 			//check the switch function is there is something that is typed right
 			checkWhatIsTyped(whatIsTyped);
 		}
 	});
 	
 	function setAnswer(placeholder,answer, cursor){
-		//make the input field empty
-		$( "#typeHere" ).val("");
-
 		//make the response div empty 
 		$(placeholder).empty();
 
@@ -93,7 +92,7 @@
 						  [keyLivingroomToHallway,keyHallwaytoOutside, ball, apple]);
 
 	livingRoom = new Room("living room", 
-							"It's a well lite room and there are two doors and a coffee table.",
+							"It's a well lite room and there are two doors opposite of eachother and there is a coffee table.",
 							[doorLivingroomToKitchen, doorLivingroomToHallway, coffeeTable]);
 	
 	kitchen = new Room("kitchen", 
@@ -165,10 +164,9 @@
 				 answer = "You pick up the " + nameItem + " from the " + container.getName();
 				 return answer;
 			 }
-			 
-			 
 		 }
 	 }
+	 
 	 
 	 function checkWhatIsTyped(typed){
 		 

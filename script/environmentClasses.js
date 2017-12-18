@@ -97,14 +97,15 @@ function Door(name, description, doorKeyID){
 	//operations
 	this.openDoor = function(){
 		if(!this.locked){
-
+			
 			//set global current space to the new space (you enterd a new room);
 			currentSpace = this.newSpace;
 			//set the door new space to old place where you come from
 			this.newSpace = this.tempSpace;
 			this.tempSpace = currentSpace;
+			return "You entered: " + currentSpace.getName();
 		}else{
-			console.log("This door is locked. You need to find a key.");
+			return "This door is locked. You need to find a key";
 		}
 	};
 
