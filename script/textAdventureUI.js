@@ -69,7 +69,7 @@
 	doorLivingroomToKitchen = new Door("Wooden door", 
 										"You can go from the livinging room to the kitchen and back");
 	
-	doorLivingroomToHallway = new Door("Wooden door painted green", 
+	doorLivingroomToHallway = new Door("Wooden green door", 
 										"You can go from the livinging room to the hallway and back",
 										123);
 	doorHallwayToOutside = new Door("Front door",
@@ -77,7 +77,7 @@
 								   213);
 	
 	keyLivingroomToHallway = new Key("rusty key",
-									 "This is the key that opens the door to the kitchen", 
+									 "This is the key that opens the door to the hallway", 
 									 123);
 	keyHallwaytoOutside = new Key("blue key",
 								 "This is the key that opens the front door",
@@ -92,15 +92,15 @@
 						  [keyLivingroomToHallway,keyHallwaytoOutside, ball, apple]);
 
 	livingRoom = new Room("living room", 
-							"It's a well lite room and there are two doors opposite of eachother and there is a coffee table.",
+							"It's a well lite room and there are two doors opposite of eachother. One wooden door and a green wooden door. and there is a coffee table.",
 							[doorLivingroomToKitchen, doorLivingroomToHallway, coffeeTable]);
 	
 	kitchen = new Room("kitchen", 
-						"The kitchen... Only one door.",
+						"The kitchen... Only one door. the wooden one.",
 						[doorLivingroomToKitchen]);
 	
 	hallway = new Room("hallway", 
-						"This is the hallway. You see light comming in through the glass window next to the front door. And there is the door to the living room.",
+						"This is the hallway. You see light comming in through the glass window next to the front door. And there is the green woodendoor to the living room.",
 						[doorLivingroomToHallway, doorHallwayToOutside]);
 	
 	outside = new StaticItem("outside", 
@@ -126,7 +126,7 @@
 		 return answer; 
 	 }
 	 
-	 function checkContainert(container){
+	 function checkContainer(container){
 		 let answer;
 		 
 		 if(container.length <= 0 || container.length == undefined){
@@ -167,6 +167,26 @@
 		 }
 	 }
 	 
+	 function checkItemInventory(nameItem){
+		 for(let i=0; i<currentInventory.length; i++){
+			 if(currentInventory[i].getName() === nameItem){
+				 return currentInventory[i];
+			 }else{
+				 return false;
+			 }
+		 }
+	 }
+	 
+	 function checkItemInCurrentRoom(nameItem){
+		 for(let i=0; i<currentSpace.length; i++){
+			 if(currentSpace.objects[i].getName() === nameItem){
+				 return currentSpace.objects[i].getDescription();
+			 }else{
+				 return "There is no " + nameItem + " in this room";
+			 }
+		 }
+	 }
+	 
 	 
 	 function checkWhatIsTyped(typed){
 		 
@@ -178,26 +198,34 @@
 				//give description of the space.
 				setAnswer("#response",lookAround(), true);
 				break;
+			case "walk to wooden door":
+			case "go to wooden door":
+				setAnswer("#response",checkItemInCurrentRoom("wooden door"), true);
+				break;
+			case "walk to wooden green door":
+			case "go to wooden green door":
+			case "walk to green door":
+			case "go to green door":
+				setAnswer("#response",checkItemInCurrentRoom("wooden green door"), true);
+				break;
 			case "open door":
 				setAnswer("#response","Which door? ", true);
 				break;
 			case "look at coffee table":
 			case "see coffee table":
 			case "check coffee table":
-				setAnswer("#response",checkContainert(coffeeTable.objects), true);
+				setAnswer("#response",checkContainer(coffeeTable.objects), true);
 				break;
 			case "take rusty key":
 			case "get rusty key":
 			case "grab rusty key":
 			case "pick up rusty key":
-				
 				setAnswer("#response",getItem("rusty key", coffeeTable), true);
 				break;		
 			case "take blue key":
 			case "get blue key":
 			case "grab blue key":
 			case "pick up blue key":
-				
 				setAnswer("#response",getItem("blue key", coffeeTable), true);
 				break;		
 			case "take ball":
@@ -216,13 +244,22 @@
 			case "use key on door": 
 				setAnswer("#response","Which door?", true);
 				break;
-			case "open left door":
-			case "open right door":
-				setAnswer("#response","This door is locked", true);
+			case "open green wooden door":
+			case "open green door":
+				setAnswer("#response",doorLivingroomToHallway.openDoor(), true);
 				break;
-			case "use key on left door": 
-			case "open left door with key": 
-				setAnswer("#response","You opened the left door", true);
+			case "open wooden door":
+				setAnswer("#response",doorLivingroomToKitchen.openDoor(), true);
+				break;
+			
+			case "use rusty key on green door": 
+			case "open green door with rusty key":
+				 let key = checkItemInventory("rusty key");
+				 if(key !== undefined){
+					 doorLivingroomToHallway.setItemKeyID(key.unLock());
+					 doorLivingroomToHallway.toggleLock();
+				 }
+				setAnswer("#response",doorLivingroomToHallway.openDoor(), true);
 				break;
 			case "use key on right door": 
 			case "open right door with key": 
@@ -233,7 +270,7 @@
 				break;
 			case "check my inventory": 
 			case "check inventory": 
-				setAnswer("#response",checkContainert(currentInventory), true);
+				setAnswer("#response",checkContainer(currentInventory), true);
 				break;
 			default:
 				setAnswer("#response","be more specific. Don't understand: "+ convertType, true);
