@@ -103,9 +103,15 @@ function Door(name, description, doorKeyID){
 			//set the door new space to old place where you come from
 			this.newSpace = this.tempSpace;
 			this.tempSpace = currentSpace;
-			return "You entered: " + currentSpace.getName();
+			
+			//Set up two answers in return
+			let answers= [];
+			answers[0] = "You entered: " + currentSpace.getName();
+			answers[1] = currentSpace.getDescription();
+			return answers;
+			
 		}else{
-			return "This door is locked. You need to find a key";
+			return "This door is locked. You need to find a key or the right key";
 		}
 	};
 

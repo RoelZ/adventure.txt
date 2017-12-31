@@ -6,6 +6,10 @@
 	"use strict";
 	let mainStory1_01; 
 	let whatIsTyped;
+	//If a function needs to return two answers
+	let answers;
+	//Set variable item 
+	let item
 	 
 	
 	//set the main story here 
@@ -156,36 +160,63 @@
 	 
 	 function getItem(nameItem, container){
 		 let answer;
-		 for(let i=0; i < container.objects.length; i++){
-			
-			 if(container.objects[i].getName() === nameItem){
-				 container.objects[i].pickUp();
-				 container.objects.splice(container.objects.indexOf(container.objects[i]),1);
-				 answer = "You pick up the " + nameItem + " from the " + container.getName();
-				 return answer;
+		 if(container !== undefined){
+			 for(let i=0; i < container.objects.length; i++){
+				 if(container.objects[i].getName() === nameItem){
+					 container.objects[i].pickUp();
+					 container.objects.splice(container.objects.indexOf(container.objects[i]),1);
+					 answer = "You pick up the " + nameItem + " from the " + container.getName();
+					 break;
+				 }else{
+					 answer = "There is no " + nameItem + "  on " + container.getName();
+				 }
+			 }
+		 }else{
+			 answer = "There is no " + nameItem + " in this space";
+		 }
+		 return answer;
+	 }
+	 
+	 function destroyItemInventory(nameItem){
+		 if(currentInventory.length !== 0 ){
+			 for(let i=0; i< currentInventory.length; i++){
+				 if(currentInventory[i].getName() === nameItem){
+					 item = currentInventory[i];
+					 currentInventory.splice(currentInventory.indexOf(item),1);
+					 break;
+				 }
 			 }
 		 }
 	 }
 	 
 	 function checkItemInventory(nameItem){
-		 for(let i=0; i<currentInventory.length; i++){
-			 if(currentInventory[i].getName() === nameItem){
-				 return currentInventory[i];
-			 }else{
-				 return false;
+		 let answer;
+		 if(currentInventory.length !== 0 ){
+			 for(let i=0; i< currentInventory.length; i++){
+				 if(currentInventory[i].getName() === nameItem){
+					 answer = currentInventory[i];
+					 break;
+				 }else{
+					 answer = "There is no " + nameItem;
+				 }
 			 }
 		 }
+		 return answer;
 	 }
 	 
 	 function checkItemInCurrentRoom(nameItem){
+		 let answer;
 		 for(let i=0; i<currentSpace.length; i++){
 			 if(currentSpace.objects[i].getName() === nameItem){
-				 return currentSpace.objects[i].getDescription();
+				 answer = currentSpace.objects[i].getDescription();
+				 break;
 			 }else{
-				 return "There is no " + nameItem + " in this room";
+				 answer = "There is no " + nameItem + " in this room";
 			 }
 		 }
+		 return answer;
 	 }
+	 
 	 
 	 
 	 function checkWhatIsTyped(typed){
@@ -220,25 +251,25 @@
 			case "get rusty key":
 			case "grab rusty key":
 			case "pick up rusty key":
-				setAnswer("#response",getItem("rusty key", coffeeTable), true);
+				setAnswer("#response",getItem("rusty key", currentSpace.objects[2]), true);
 				break;		
 			case "take blue key":
 			case "get blue key":
 			case "grab blue key":
 			case "pick up blue key":
-				setAnswer("#response",getItem("blue key", coffeeTable), true);
+				setAnswer("#response",getItem("blue key",  currentSpace.objects[2]), true);
 				break;		
 			case "take ball":
 			case "get ball":
 			case "grab ball":
 			case "pick up ball":
-				setAnswer("#response",getItem("ball", coffeeTable), true);
+				setAnswer("#response",getItem("ball",  currentSpace.objects[2]), true);
 				break;		
 			case "take apple":
 			case "get apple":
 			case "grab apple":
 			case "pick up appple":
-				setAnswer("#response",getItem("apple", coffeeTable), true);
+				setAnswer("#response",getItem("apple",  currentSpace.objects[2]), true);
 				break;		
 			case "open door with key": 
 			case "use key on door": 
@@ -246,31 +277,114 @@
 				break;
 			case "open green wooden door":
 			case "open green door":
-				setAnswer("#response",doorLivingroomToHallway.openDoor(), true);
+				answers = doorLivingroomToHallway.openDoor();
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
 				break;
 			case "open wooden door":
-				setAnswer("#response",doorLivingroomToKitchen.openDoor(), true);
+				answers = doorLivingroomToKitchen.openDoor();
+				
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
 				break;
 			
 			case "use rusty key on green door": 
 			case "open green door with rusty key":
-				 let key = checkItemInventory("rusty key");
+				 item = checkItemInventory("rusty key");
+				
+				 if(item !== undefined){
+					 doorLivingroomToHallway.setItemKeyID(key.unLock());
+					 doorLivingroomToHallway.toggleLock();
+				 }
+				 
+				answers = doorLivingroomToHallway.openDoor();
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
+				break;
+			case "use blue key on green door": 
+			case "open green door with blue key":
+				 key = checkItemInventory("blue key");
+				
 				 if(key !== undefined){
 					 doorLivingroomToHallway.setItemKeyID(key.unLock());
 					 doorLivingroomToHallway.toggleLock();
 				 }
-				setAnswer("#response",doorLivingroomToHallway.openDoor(), true);
+				 
+				answers = doorLivingroomToHallway.openDoor();
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
 				break;
-			case "use key on right door": 
-			case "open right door with key": 
-				setAnswer("#response","Key doesn't fit in this door", true);
+			case "use blue key on front door": 
+			case "open front door with blue key": 
+				 item = checkItemInventory("blue key");
+				  console.log(item);
+				 if(item !== undefined){
+					 doorHallwayToOutside.setItemKeyID(key.unLock());
+					 doorHallwayToOutside.toggleLock();
+				 }
+				 
+				answers = doorHallwayToOutside.openDoor();
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
 				break;
-			case "use key on right door": 
-				setAnswer("#response","Key doesn't fit in this door", true);
+			case "use rusty key on front door": 
+			case "open front door with rusty key": 
+				 item = checkItemInventory("rusty key");
+				  console.log(item);
+				 if(item !== undefined){
+					 doorHallwayToOutside.setItemKeyID(key.unLock());
+					 doorHallwayToOutside.toggleLock();
+				 }
+				 
+				answers = doorHallwayToOutside.openDoor();
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
+				break;
+			case "open front door": 
+				answers = doorHallwayToOutside.openDoor();
+				
+				if(jQuery.type( answers) === "array"){
+					setAnswer("#mainstoryText",answers[1], true);
+					setAnswer("#response",answers[0], true);
+				}else{
+					setAnswer("#response",answers, true);
+				}
 				break;
 			case "check my inventory": 
 			case "check inventory": 
 				setAnswer("#response",checkContainer(currentInventory), true);
+				break;
+			case "eat apple": 
+				item = checkItemInventory("apple");
+				if(item !== undefined){
+					setAnswer("#response",item.getName(), true);
+				}else{
+					setAnswer("#response","You don't have an apple", true);
+				}
 				break;
 			default:
 				setAnswer("#response","be more specific. Don't understand: "+ convertType, true);
