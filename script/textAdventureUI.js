@@ -70,13 +70,13 @@
 
 	//test classes with making objects
 	
-	doorLivingroomToKitchen = new Door("Wooden door", 
+	doorLivingroomToKitchen = new Door("wooden door", 
 										"You can go from the livinging room to the kitchen and back");
 	
-	doorLivingroomToHallway = new Door("Wooden green door", 
+	doorLivingroomToHallway = new Door("wooden green door", 
 										"You can go from the livinging room to the hallway and back",
 										123);
-	doorHallwayToOutside = new Door("Front door",
+	doorHallwayToOutside = new Door("front door",
 								   "You can go outside the house and back",
 								   213);
 	
@@ -206,7 +206,7 @@
 	 
 	 function checkItemInCurrentRoom(nameItem){
 		 let answer;
-		 for(let i=0; i<currentSpace.length; i++){
+		 for(let i=0; i<currentSpace.objects.length; i++){
 			 if(currentSpace.objects[i].getName() === nameItem){
 				 answer = currentSpace.objects[i].getDescription();
 				 break;
@@ -228,6 +228,10 @@
 			case "look space":
 				//give description of the space.
 				setAnswer("#response",lookAround(), true);
+				break;
+			case "stand up":
+			case "get up":
+				setAnswer("#response","You get up", true);
 				break;
 			case "walk to wooden door":
 			case "go to wooden door":
@@ -299,9 +303,8 @@
 			case "use rusty key on green door": 
 			case "open green door with rusty key":
 				 item = checkItemInventory("rusty key");
-				
 				 if(item !== undefined){
-					 doorLivingroomToHallway.setItemKeyID(key.unLock());
+					 doorLivingroomToHallway.setItemKeyID(item.unLock());
 					 doorLivingroomToHallway.toggleLock();
 				 }
 				 
@@ -318,7 +321,7 @@
 				 key = checkItemInventory("blue key");
 				
 				 if(key !== undefined){
-					 doorLivingroomToHallway.setItemKeyID(key.unLock());
+					 doorLivingroomToHallway.setItemKeyID(item.unLock());
 					 doorLivingroomToHallway.toggleLock();
 				 }
 				 
