@@ -318,27 +318,28 @@
 				break;
 			case "use blue key on green door": 
 			case "open green door with blue key":
-				 key = checkItemInventory("blue key");
-				
-				 if(key !== undefined){
+				 item = checkItemInventory("blue key");
+				 if(item !== undefined){
 					 doorLivingroomToHallway.setItemKeyID(item.unLock());
 					 doorLivingroomToHallway.toggleLock();
 				 }
 				 
 				answers = doorLivingroomToHallway.openDoor();
-				if(jQuery.type( answers) === "array"){
+				
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{
 					setAnswer("#response",answers, true);
 				}
+				
 				break;
 			case "use blue key on front door": 
 			case "open front door with blue key": 
 				 item = checkItemInventory("blue key");
 				  console.log(item);
 				 if(item !== undefined){
-					 doorHallwayToOutside.setItemKeyID(key.unLock());
+					 doorHallwayToOutside.setItemKeyID(item.unLock());
 					 doorHallwayToOutside.toggleLock();
 				 }
 				 
@@ -355,7 +356,7 @@
 				 item = checkItemInventory("rusty key");
 				  console.log(item);
 				 if(item !== undefined){
-					 doorHallwayToOutside.setItemKeyID(key.unLock());
+					 doorHallwayToOutside.setItemKeyID(item.unLock());
 					 doorHallwayToOutside.toggleLock();
 				 }
 				 
