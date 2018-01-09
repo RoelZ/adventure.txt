@@ -59,9 +59,14 @@
 	//keys
 	let keyLivingroomToHallway;
 	let keyHallwaytoOutside;
-	 
+	
+	//Items 
 	let ball;
 	let apple; 
+	
+	//Persons
+	let person;
+	
 	//spaces
 	let livingRoom;
 	let kitchen;
@@ -79,6 +84,16 @@
 	doorHallwayToOutside = new Door("front door",
 								   "You can go outside the house and back",
 								   213);
+	 
+	apple = new PortableItem("apple",
+						"A tasty red apple");
+	 
+	person = new Character("Jim",
+				   "He is standing in the corner. Looks like a nice guy",
+				   [apple],
+				   [	["which key fits in the door", "I think it was the rusty key."],
+						["what are you doing here", "I don't know."]
+					]);
 	
 	keyLivingroomToHallway = new Key("rusty key",
 									 "This is the key that opens the door to the hallway", 
@@ -88,16 +103,15 @@
 								 213);
 	ball = new PortableItem("ball",
 						    "A small rubber ball");
-	apple = new PortableItem("apple",
-						"A tasty red apple");
 	 
 	coffeeTable = new StaticItem("coffee table",
 						  "A small coffee table",
-						  [keyLivingroomToHallway,keyHallwaytoOutside, ball, apple]);
+						  [keyLivingroomToHallway,keyHallwaytoOutside, ball]);
+	
 
 	livingRoom = new Room("living room", 
-							"It's a well lite room and there are two doors opposite of eachother. One wooden door and a green wooden door. and there is a coffee table.",
-							[doorLivingroomToKitchen, doorLivingroomToHallway, coffeeTable]);
+							"It's a well lite room and there are two doors opposite of eachother. One wooden door and a green wooden door. There's a man and there is a coffee table.",
+							[doorLivingroomToKitchen, doorLivingroomToHallway, coffeeTable, person]);
 	
 	kitchen = new Room("kitchen", 
 						"The kitchen... Only one door. the wooden one.",
@@ -110,6 +124,7 @@
 	outside = new StaticItem("outside", 
 							"It's a forrest and it's a sunny day",
 							[doorHallwayToOutside]);
+	 
 	
 	//set the rooms that are connected to this door. First room where you in then the room that goes to.
 	doorLivingroomToKitchen.setSpaces(livingRoom, kitchen);
@@ -243,6 +258,10 @@
 			case "go to green door":
 				setAnswer("#response",checkItemInCurrentRoom("wooden green door"), true);
 				break;
+			case "walk to person":
+			case "go to person":
+				setAnswer("#response",checkItemInCurrentRoom("Jim"), true);
+				break;
 			case "open door":
 				setAnswer("#response","Which door? ", true);
 				break;
@@ -256,6 +275,23 @@
 			case "grab rusty key":
 			case "pick up rusty key":
 				setAnswer("#response",getItem("rusty key", currentSpace.objects[2]), true);
+				break;		
+			case "what is your name?":
+			case "what is your name":
+				 if(checkItemInCurrentRoom("Jim")!== "There is no Jim in this room"){
+					 setAnswer("#response",person.getName(), true);
+				 }else{
+					 setAnswer("#response","Nobody here...", true);
+				 }
+				
+				break;		
+			case "which key fits in the door?":
+			case "which key fits in the door":
+				setAnswer("#response",person.getAnswer("which key fits in the door"), true);
+				break;		
+			case "what are you doing here?":
+			case "what are you doing here":
+				setAnswer("#response",person.getAnswer("what are you doing here"), true);
 				break;		
 			case "take blue key":
 			case "get blue key":
@@ -282,7 +318,7 @@
 			case "open green wooden door":
 			case "open green door":
 				answers = doorLivingroomToHallway.openDoor();
-				if(jQuery.type( answers) === "array"){
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{
@@ -292,7 +328,7 @@
 			case "open wooden door":
 				answers = doorLivingroomToKitchen.openDoor();
 				
-				if(jQuery.type( answers) === "array"){
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{
@@ -309,7 +345,7 @@
 				 }
 				 
 				answers = doorLivingroomToHallway.openDoor();
-				if(jQuery.type( answers) === "array"){
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{
@@ -337,14 +373,13 @@
 			case "use blue key on front door": 
 			case "open front door with blue key": 
 				 item = checkItemInventory("blue key");
-				  console.log(item);
 				 if(item !== undefined){
 					 doorHallwayToOutside.setItemKeyID(item.unLock());
 					 doorHallwayToOutside.toggleLock();
 				 }
 				 
 				answers = doorHallwayToOutside.openDoor();
-				if(jQuery.type( answers) === "array"){
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{
@@ -361,7 +396,7 @@
 				 }
 				 
 				answers = doorHallwayToOutside.openDoor();
-				if(jQuery.type( answers) === "array"){
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{
@@ -371,7 +406,7 @@
 			case "open front door": 
 				answers = doorHallwayToOutside.openDoor();
 				
-				if(jQuery.type( answers) === "array"){
+				if(jQuery.type(answers) === "array"){
 					setAnswer("#mainstoryText",answers[1], true);
 					setAnswer("#response",answers[0], true);
 				}else{

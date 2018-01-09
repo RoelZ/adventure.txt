@@ -159,13 +159,39 @@ function Room(name, description, objects){
 	//public attributes
 	//get the vars that are setup in the parent class
 	StaticItem.call(this, name, description,objects);
-
 	
 }
 
 //Room is child of StaticItem
 Room.prototype = new StaticItem();
 Room.prototype.constructor = Room; 
+
+
+//Character 
+function Character(name, description, objects, questionsAnswers){ 
+	//public attributes
+	//get the vars that are setup in the parent class
+	StaticItem.call(this, name, description, objects);
+
+	
+	this.questionsAnswers = questionsAnswers;
+	
+	this.getAnswer = function(question){
+		for(let i=0; i<this.questionsAnswers.length; i++){
+			if(question === this.questionsAnswers[i][0]){
+				return this.questionsAnswers[i][1];
+				break;
+			}
+		}
+	};
+	
+	
+	
+}
+
+//Character is child of StaticItem
+Character.prototype = new StaticItem();
+Character.prototype.constructor = Character; 
 
 
 
