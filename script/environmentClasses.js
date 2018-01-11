@@ -41,7 +41,6 @@ function StaticItem(name, description, objects){
 		return this.id;
 	};
 	
-	
 	this.getObjects = function(){
 		console.log("Objects in the room:");
 		for(let i = 0; i<this.objects.length; i++){
