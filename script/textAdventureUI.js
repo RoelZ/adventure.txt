@@ -14,6 +14,12 @@
 	
 	//set the main story here 
 	mainStory1_01 = "You wake up in a room on the floor.<br>And you don't know where you are...";
+	 
+	 
+	//List of random default answer
+	let defaultAnswer = ["be more specific. Don't understand: ",
+						"That's not posible... ",
+						"You're just babbling... "];
 	
 	
 	$("#mainstoryText").html(mainStory1_01);
@@ -232,6 +238,26 @@
 		 return answer;
 	 }
 	 
+	 function checkCharacterInRoom(person){
+		 let answer;
+		 for(let i=0; i<currentSpace.objects.length; i++){
+			 if(currentSpace.objects[i].getName() === nameItem){
+				 answer = true;
+				 break;
+			 }else{
+				 answer = false;
+			 }
+		 }
+	 }
+	 
+	 function giveRandomAnswer(listAnswers){
+		 let answer;
+		 let totalAnswers = listAnswers.length;
+		 let randomNumer = Math.floor(Math.random()*totalAnswers);
+		 answer = listAnswers[randomNumer];
+		 return answer;
+	 }
+	 
 	 
 	 
 	 function checkWhatIsTyped(typed){
@@ -278,16 +304,19 @@
 				break;		
 			case "what is your name?":
 			case "what is your name":
-				 if(checkItemInCurrentRoom("Jim")!== "There is no Jim in this room"){
-					 setAnswer("#response",person.getName(), true);
+				 if(checkCharacterInRoom("Jim")){
+					setAnswer("#response","Nobody here...", true);
 				 }else{
-					 setAnswer("#response","Nobody here...", true);
+					  setAnswer("#response",person.getName(), true);
 				 }
-				
 				break;		
 			case "which key fits in the door?":
 			case "which key fits in the door":
-				setAnswer("#response",person.getAnswer("which key fits in the door"), true);
+				 if(checkCharacterInRoom("Jim")){
+					setAnswer("#response",person.getAnswer("which key fits in the door"), true);
+				 }else{
+					 setAnswer("#response","There is nodbody in the room...", true);
+				 }
 				break;		
 			case "what are you doing here?":
 			case "what are you doing here":
@@ -426,7 +455,7 @@
 				}
 				break;
 			default:
-				setAnswer("#response","be more specific. Don't understand: "+ convertType, true);
+				setAnswer("#response",giveRandomAnswer(defaultAnswer)+ convertType, true);
 		 }
 	 } 
 	 
